@@ -1,16 +1,32 @@
 [
   {
     "blocker_id": "1b2d3c4e-5f6a-7d8e-9a0b-1c2d3e4f5a6b",
-    "description": "The FastAPI router deployment is blocked due to missing AWS IAM permissions from DevOps.",
-    "owner_id": "P-102",
+    "description": "Ayush is blocked by Docker configurations and environment variables, delaying the biometrics DB connection.",
+    "owner_id": "P-101",
+    "type": "technical",
+    "severity": "medium",
+    "blocking_entity_id": "P-101",
+    "repeat_occurrence": false,
+    "escalated": false,
+    "affected_deliverables": [
+      "biometrics DB connection"
+    ],
+    "confidence": 0.9,
+    "days_open": 1
+  },
+  {
+    "blocker_id": "2b3c4d5e-6f7a-8a9b-0c1d-2e3f4a5b6c7d",
+    "description": "John is blocked due to missing AWS IAM permissions from DevOps, preventing progress on the FastAPI router.",
+    "owner_id": "P-103",
     "type": "dependency",
-    "severity": "critical",
+    "severity": "high",
     "blocking_entity_id": "P-103",
     "repeat_occurrence": false,
-    "escalated": true,
+    "escalated": false,
     "affected_deliverables": [
-      "FastAPI router deployment"
+      "FastAPI router"
     ],
-    "confidence": 0.95
+    "confidence": 0.9,
+    "days_open": 1
   }
 ]

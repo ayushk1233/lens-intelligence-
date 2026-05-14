@@ -1,6 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from src.lens.graph import lens_app
 from src.nerve.routers.file_router import route_lens_outputs # <--- IMPORT ADDED
 
@@ -10,6 +10,7 @@ class MeetPayload(BaseModel):
     transcript: str
     attendees: List[Dict[str, Any]]
     metadata: Dict[str, Any]
+    past_commitments: Optional[List[Dict[str, Any]]] = [] # NEW
 
 def process_meeting(payload: MeetPayload):
     """Background task that runs LENS and routes the output."""
@@ -21,7 +22,8 @@ def process_meeting(payload: MeetPayload):
     initial_state = {
         "transcript": payload.transcript,
         "attendees": payload.attendees,
-        "metadata": payload.metadata
+        "metadata": payload.metadata,
+        "past_commitments": payload.past_commitments # NEW
     }
     
     try:
@@ -34,6 +36,8 @@ def process_meeting(payload: MeetPayload):
             meeting_id=meeting_id,
             commitments=final_state.get("commitments"),
             blockers=final_state.get("blockers"),
+            delivery_drift=final_state.get("delivery_drift"),
+            participation=final_state.get("participation"),
             cold_summary_yaml=final_state.get("cold_summary_yaml")
         )
             

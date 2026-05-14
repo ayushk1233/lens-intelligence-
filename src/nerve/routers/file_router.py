@@ -1,46 +1,43 @@
 import os
 import json
-from datetime import datetime
-from src.shared.schemas.lens_outputs import CommitmentExtraction, BlockerExtraction
+from src.shared.schemas.lens_outputs import (
+    CommitmentExtraction, BlockerExtraction, DeliveryDrift, ParticipationAnalytics
+)
 
-# In production, this would be an S3 bucket or mounted K8s volume. 
-# For now, we use a local 'data' directory at the root of the repo.
 BASE_STORAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "data")
 
-def route_lens_outputs(project_id: str, meeting_id: str, commitments: CommitmentExtraction, blockers: BlockerExtraction, cold_summary_yaml: str):
-    """
-    Routes the extracted LENS intelligence to the correct physical directories.
-    Following PULSE rules: Primary storage axis is project_id.
-    """
+def route_lens_outputs(project_id: str, meeting_id: str, commitments: CommitmentExtraction, blockers: BlockerExtraction, delivery_drift: DeliveryDrift, participation: ParticipationAnalytics, cold_summary_yaml: str):
     
-    # 1. Define the physical paths
-    # e.g., data/projects/PROJ-Alpha/warm/meetings/M-999-FINAL/
-    meeting_dir = os.path.join(BASE_STORAGE_DIR, "projects", project_id, "warm", "meetings", meeting_id)
+    meeting_dir_warm = os.path.join(BASE_STORAGE_DIR, "projects", project_id, "warm", "meetings", meeting_id)
+    os.makedirs(meeting_dir_warm, exist_ok=True)
     
-    # Ensure directories exist
-    os.makedirs(meeting_dir, exist_ok=True)
-    
-    # 2. Write Commitments to disk (Layer 2A)
+    # 1. Commitments & 2. Blockers (Keep your existing logic for these two)
     if commitments and commitments.commitments:
-        commitments_path = os.path.join(meeting_dir, "commitments.json")
-        with open(commitments_path, "w", encoding="utf-8") as f:
-            # Pydantic's model_dump() cleanly converts to dicts
+        with open(os.path.join(meeting_dir_warm, "commitments.json"), "w", encoding="utf-8") as f:
             json.dump([c.model_dump(mode='json') for c in commitments.commitments], f, indent=2)
-        print(f"📁 [NERVE ROUTER] Saved Commitments to {commitments_path}")
+        print("📁 [NERVE ROUTER] Saved Commitments")
 
-    # 3. Write Blockers to disk (Layer 2B)
     if blockers and blockers.blockers:
-        blockers_path = os.path.join(meeting_dir, "blockers.json")
-        with open(blockers_path, "w", encoding="utf-8") as f:
+        with open(os.path.join(meeting_dir_warm, "blockers.json"), "w", encoding="utf-8") as f:
             json.dump([b.model_dump(mode='json') for b in blockers.blockers], f, indent=2)
-        print(f"📁 [NERVE ROUTER] Saved Blockers to {blockers_path}")
+        print("📁 [NERVE ROUTER] Saved Blockers")
 
+    # 3. Write Delivery Drift (Layer 2C)
+    if delivery_drift:
+        with open(os.path.join(meeting_dir_warm, "drift.json"), "w", encoding="utf-8") as f:
+            json.dump(delivery_drift.model_dump(mode='json'), f, indent=2)
+        print("📁 [NERVE ROUTER] Saved Delivery Drift")
+
+    # 4. Write Participation Analytics (Layer 3C)
+    if participation and participation.metrics:
+        with open(os.path.join(meeting_dir_warm, "participation.json"), "w", encoding="utf-8") as f:
+            json.dump([m.model_dump(mode='json') for m in participation.metrics], f, indent=2)
+        print("📁 [NERVE ROUTER] Saved Participation Analytics")
+
+    # 5. Write COLD Summary
     if cold_summary_yaml:
-        # Notice PULSE architecture dictates summaries go to the COLD folder, not WARM
         meeting_dir_cold = os.path.join(BASE_STORAGE_DIR, "projects", project_id, "cold", "meetings", meeting_id)
         os.makedirs(meeting_dir_cold, exist_ok=True)
-        
-        yaml_path = os.path.join(meeting_dir_cold, "summary.yaml")
-        with open(yaml_path, "w", encoding="utf-8") as f:
+        with open(os.path.join(meeting_dir_cold, "summary.yaml"), "w", encoding="utf-8") as f:
             f.write(cold_summary_yaml)
-        print(f"📁 [NERVE ROUTER] Saved COLD Summary to {yaml_path}")
+        print("📁 [NERVE ROUTER] Saved COLD Summary")

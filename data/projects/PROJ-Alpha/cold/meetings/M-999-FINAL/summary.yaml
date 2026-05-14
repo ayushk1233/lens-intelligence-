@@ -1,6 +1,8 @@
 decisions:
-  - escalate AWS IAM permissions to DevOps
+  - Ayush to push biometrics DB connection by tomorrow evening
+  - John blocked by AWS IAM permissions
 action_items:
-  - Ayush: push DB connection script by tomorrow evening
+  - Ayush: resolve Docker configurations
+  - John: follow up with DevOps on IAM permissions
 blockers:
-  - John: blocked by ungranted AWS IAM permissions
+  - AWS IAM permissions not granted

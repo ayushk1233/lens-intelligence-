@@ -1,0 +1,13 @@
+{
+  "drift_detected": true,
+  "gap_summary": "Ayush was supposed to connect the PostgreSQL DB to the biometrics container by Tuesday, but he is delayed due to issues with Docker configurations and environment variables. He now promises to complete it by tomorrow evening.",
+  "estimated_delay_days": 1,
+  "unresolved_carried_forward": [
+    {
+      "original_commitment_statement": "I will connect the PostgreSQL DB to the biometrics container by Tuesday.",
+      "owner_id": "P-101",
+      "reason_for_delay": "Got lost in the Docker configurations and couldn't figure out the environment variables.",
+      "new_promised_date": "Tomorrow evening."
+    }
+  ]
+}

@@ -72,3 +72,32 @@ class BlockerExtraction(BaseModel):
 # --- LAYER 2G: COLD SUMMARY ---
 class ColdSummary(BaseModel):
     yaml_content: str = Field(..., description="Strict, highly compressed YAML string containing only decisions, action items, and blockers.")
+
+
+# --- LAYER 2C: DELIVERY DRIFT ---
+
+class UnresolvedItem(BaseModel):
+    original_commitment_statement: str = Field(..., description="What was promised in the last meeting")
+    owner_id: str = Field(..., description="The person_id who originally owned it")
+    reason_for_delay: str = Field(..., description="Why it was not completed")
+    new_promised_date: Optional[str] = Field(None, description="The newly established timeline, if any")
+
+class DeliveryDrift(BaseModel):
+    drift_detected: bool = Field(..., description="True if commitments from the prior meeting were explicitly missed or delayed.")
+    gap_summary: str = Field(..., description="Plain English summary of the gap between the expected state and current reality.")
+    estimated_delay_days: int = Field(default=0, description="Integer estimate of how many days the project is pushed back. 0 if on track.")
+    unresolved_carried_forward: List[UnresolvedItem] = Field(
+        default_factory=list, 
+        description="Items from the past meeting that are still not done."
+    )
+
+# --- LAYER 3C: PARTICIPATION ANALYTICS ---
+
+class SpeakerMetrics(BaseModel):
+    speaker_id: str = Field(..., description="Resolved person_id from attendees.json")
+    initiative_score: int = Field(..., ge=1, le=10, description="1-10 score measuring proactive ownership and solution-oriented speech.")
+    confusion_flag: bool = Field(..., description="True if the speaker exhibited significant confusion, asked repetitive basic questions, or lacked context.")
+    clarification_requests: int = Field(default=0, description="Count of how many times this speaker asked others to clarify something.")
+
+class ParticipationAnalytics(BaseModel):
+    metrics: List[SpeakerMetrics]

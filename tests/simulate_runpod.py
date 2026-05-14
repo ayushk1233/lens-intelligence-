@@ -9,11 +9,10 @@ def simulate_webhook():
     # 1. The exact payload structure NERVE expects
     payload = {
         "transcript": """
-        Sarah Connor: Alright team, let's get a quick status update on the new Meet orchestration pipeline. Ayush, where are we with the biometrics integration?
-        Ayush Kumar: I'm still working on pulling the embeddings from the secure DB. I will have the DB connection script pushed and tested by tomorrow evening.
-        Sarah Connor: Great, I'll mark that down. John, is the FastAPI router ready?
-        John Smith: Not yet. I am completely blocked right now because the AWS IAM permissions haven't been granted by DevOps. I can't deploy the container until they approve the request.
-        Sarah Connor: Okay, I will escalate that to DevOps right after this call.
+        Sarah Connor: Alright team, let's get a quick status update. Ayush, what happened with the biometrics DB connection? You said it would be done by Tuesday.
+        Ayush Kumar: I'm really sorry, I got completely lost in the Docker configurations and couldn't figure out the environment variables. I'm still working on pulling the embeddings. I will have it pushed by tomorrow evening.
+        Sarah Connor: Okay... John, is the FastAPI router ready?
+        John Smith: Not yet. I am completely blocked right now because the AWS IAM permissions haven't been granted by DevOps. 
         """,
         "attendees": [
             {"person_id": "P-101", "name": "Ayush Kumar", "role": "AI Developer Intern"},
@@ -24,7 +23,16 @@ def simulate_webhook():
             "meeting_id": "M-999-FINAL",
             "project_id": "PROJ-Alpha",
             "security_level": "Internal"
-        }
+        },
+        # NEW: Injecting a memory of a past promise that Ayush missed
+        "past_commitments": [
+            {
+                "commitment_id": "C-001",
+                "speaker_id": "P-101",
+                "statement": "I will connect the PostgreSQL DB to the biometrics container by Tuesday.",
+                "status": "open"
+            }
+        ]
     }
 
     # 2. Convert to JSON and set headers

@@ -50,3 +50,38 @@ Attendees:
 """),
     ("human", "Meeting Transcript:\n{transcript}\n\nOutput the highly compressed YAML summary.")
 ])
+
+# --- LAYER 2C: DELIVERY DRIFT PROMPT ---
+DELIVERY_DRIFT_PROMPT = ChatPromptTemplate.from_messages([
+    ("system", """You are LENS. Your job is to detect 'Delivery Drift' by comparing what was promised in the previous meeting to what is happening in the current meeting.
+
+CRITICAL RULES:
+1. DRIFT DETECTION: Review the Past Commitments. If a commitment was supposed to be done but the current transcript reveals it is delayed, blocked, or ignored, flag it as drift.
+2. DELAY ESTIMATE: Provide a logical integer estimate of how many days the project is pushed back due to this drift (0 if everything is on track).
+3. UNRESOLVED ITEMS: Extract exactly what was promised, who owned it, why it was delayed, and the new date.
+
+Attendees List (Valid person_ids):
+{attendees_json}
+
+Past Commitments (From the previous meeting):
+{past_commitments_json}
+"""),
+    ("human", "Current Meeting Transcript:\n{transcript}\n\nAnalyze the drift and output the required JSON schema.")
+])
+
+
+# --- LAYER 3C: PARTICIPATION ANALYTICS PROMPT ---
+PARTICIPATION_PROMPT = ChatPromptTemplate.from_messages([
+    ("system", """You are LENS. Your job is to analyze speaker behavior and participation metrics.
+
+CRITICAL RULES:
+1. INITIATIVE: Score each speaker (1-10) based on proactive ownership, driving the agenda, and offering solutions.
+2. CONFUSION FLAG: Set to true ONLY IF the speaker exhibits significant confusion, asks repetitive basic questions, or clearly lacks context for their assigned tasks (crucial for detecting intern struggle).
+3. CLARIFICATION REQUESTS: Count how many times the speaker explicitly asked others to explain or clarify something.
+4. IDENTITY: Only score speakers who can be mapped to the Attendees List.
+
+Attendees List (Valid person_ids):
+{attendees_json}
+"""),
+    ("human", "Meeting Transcript:\n{transcript}\n\nExtract participation analytics into the required JSON schema.")
+])
