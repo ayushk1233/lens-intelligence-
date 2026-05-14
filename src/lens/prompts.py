@@ -34,3 +34,19 @@ Attendees List (Valid person_ids):
 """),
     ("human", "Meeting Transcript:\n{transcript}\n\nExtract all blockers into the required JSON schema.")
 ])
+
+# --- LAYER 2G: YAML SUMMARY PROMPT ---
+YAML_SUMMARY_PROMPT = ChatPromptTemplate.from_messages([
+    ("system", """You are LENS. Your job is extreme data compression. 
+Generate a highly compressed, signal-only YAML summary of the provided meeting.
+
+CRITICAL RULES:
+1. MAX COMPRESSION: Keep it under 85 tokens. Strip all pleasantries and dialogue context.
+2. PURE SIGNAL: Extract ONLY decisions, action items, scope flags, and blockers.
+3. FORMAT: Output MUST be a valid YAML string.
+
+Attendees:
+{attendees_json}
+"""),
+    ("human", "Meeting Transcript:\n{transcript}\n\nOutput the highly compressed YAML summary.")
+])

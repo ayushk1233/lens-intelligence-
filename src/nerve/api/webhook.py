@@ -33,7 +33,8 @@ def process_meeting(payload: MeetPayload):
             project_id=project_id,
             meeting_id=meeting_id,
             commitments=final_state.get("commitments"),
-            blockers=final_state.get("blockers")
+            blockers=final_state.get("blockers"),
+            cold_summary_yaml=final_state.get("cold_summary_yaml")
         )
             
     except Exception as e:

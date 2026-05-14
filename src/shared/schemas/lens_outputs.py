@@ -68,3 +68,7 @@ class Blocker(BaseModel):
 class BlockerExtraction(BaseModel):
     """Wrapper to force LLM to output a list of blockers"""
     blockers: List[Blocker]
+
+# --- LAYER 2G: COLD SUMMARY ---
+class ColdSummary(BaseModel):
+    yaml_content: str = Field(..., description="Strict, highly compressed YAML string containing only decisions, action items, and blockers.")

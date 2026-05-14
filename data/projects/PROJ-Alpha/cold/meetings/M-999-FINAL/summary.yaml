@@ -1,0 +1,6 @@
+decisions:
+  - escalate AWS IAM permissions to DevOps
+action_items:
+  - Ayush: push DB connection script by tomorrow evening
+blockers:
+  - John: blocked by ungranted AWS IAM permissions

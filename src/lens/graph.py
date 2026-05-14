@@ -3,9 +3,10 @@ from typing import TypedDict, List, Dict, Any, Optional
 from langgraph.graph import StateGraph, END
 
 # Import schemas, LLM client, and prompts
-from src.shared.schemas.lens_outputs import CommitmentExtraction, BlockerExtraction
+
 from src.shared.utils.llm_client import get_structured_llm
-from src.lens.prompts import COMMITMENT_EXTRACTION_PROMPT, BLOCKER_EXTRACTION_PROMPT
+from src.shared.schemas.lens_outputs import CommitmentExtraction, BlockerExtraction, ColdSummary
+from src.lens.prompts import COMMITMENT_EXTRACTION_PROMPT, BLOCKER_EXTRACTION_PROMPT, YAML_SUMMARY_PROMPT
 
 # --- 1. STATE DEFINITION ---
 class LensState(TypedDict):
@@ -69,17 +70,35 @@ def extract_blockers_node(state: LensState) -> Dict[str, Any]:
         print(f"[ERROR] Failed to extract blockers: {e}")
         return {"blockers": None}
 
+
+def generate_summary_node(state: LensState) -> Dict[str, Any]:
+    """Node responsible for extracting Layer 2G: COLD YAML Summary."""
+    print("-> LENS Node: Generating COLD Summary...")
+    transcript = state.get("transcript", "")
+    attendees_json = json.dumps(state.get("attendees", []), indent=2)
+    
+    llm = get_structured_llm(schema=ColdSummary, model_name="gpt-4o-mini")
+    chain = YAML_SUMMARY_PROMPT | llm
+    
+    try:
+        result = chain.invoke({"transcript": transcript, "attendees_json": attendees_json})
+        return {"cold_summary_yaml": result.yaml_content}
+    except Exception as e:
+        print(f"[ERROR] Failed to generate summary: {e}")
+        return {"cold_summary_yaml": None}
+
 # --- 3. GRAPH COMPILATION ---
 def build_lens_graph():
-    """Builds and compiles the LENS state graph."""
     workflow = StateGraph(LensState)
     
     workflow.add_node("extract_commitments", extract_commitments_node)
     workflow.add_node("extract_blockers", extract_blockers_node)
+    workflow.add_node("generate_summary", generate_summary_node) # NEW
     
     workflow.set_entry_point("extract_commitments")
     workflow.add_edge("extract_commitments", "extract_blockers")
-    workflow.add_edge("extract_blockers", END)
+    workflow.add_edge("extract_blockers", "generate_summary") # UPDATED EDGE
+    workflow.add_edge("generate_summary", END) # NEW EDGE
     
     return workflow.compile()
 

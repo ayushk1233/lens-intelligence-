@@ -7,7 +7,7 @@ from src.shared.schemas.lens_outputs import CommitmentExtraction, BlockerExtract
 # For now, we use a local 'data' directory at the root of the repo.
 BASE_STORAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "data")
 
-def route_lens_outputs(project_id: str, meeting_id: str, commitments: CommitmentExtraction, blockers: BlockerExtraction):
+def route_lens_outputs(project_id: str, meeting_id: str, commitments: CommitmentExtraction, blockers: BlockerExtraction, cold_summary_yaml: str):
     """
     Routes the extracted LENS intelligence to the correct physical directories.
     Following PULSE rules: Primary storage axis is project_id.
@@ -34,3 +34,13 @@ def route_lens_outputs(project_id: str, meeting_id: str, commitments: Commitment
         with open(blockers_path, "w", encoding="utf-8") as f:
             json.dump([b.model_dump(mode='json') for b in blockers.blockers], f, indent=2)
         print(f"📁 [NERVE ROUTER] Saved Blockers to {blockers_path}")
+
+    if cold_summary_yaml:
+        # Notice PULSE architecture dictates summaries go to the COLD folder, not WARM
+        meeting_dir_cold = os.path.join(BASE_STORAGE_DIR, "projects", project_id, "cold", "meetings", meeting_id)
+        os.makedirs(meeting_dir_cold, exist_ok=True)
+        
+        yaml_path = os.path.join(meeting_dir_cold, "summary.yaml")
+        with open(yaml_path, "w", encoding="utf-8") as f:
+            f.write(cold_summary_yaml)
+        print(f"📁 [NERVE ROUTER] Saved COLD Summary to {yaml_path}")
