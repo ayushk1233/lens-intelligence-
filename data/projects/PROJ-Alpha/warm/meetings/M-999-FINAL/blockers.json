@@ -1,0 +1,17 @@
+[
+  {
+    "blocker_id": "1b2d3c4e-5f6a-7d8e-9a0b-1c2d3e4f5a6b",
+    "description": "The FastAPI router deployment is blocked due to missing AWS IAM permissions from DevOps, preventing progress on the Meet orchestration pipeline.",
+    "owner_id": "P-102",
+    "type": "dependency",
+    "severity": "critical",
+    "blocking_entity_id": "P-103",
+    "repeat_occurrence": false,
+    "escalated": true,
+    "affected_deliverables": [
+      "FastAPI router deployment",
+      "Meet orchestration pipeline"
+    ],
+    "confidence": 0.95
+  }
+]

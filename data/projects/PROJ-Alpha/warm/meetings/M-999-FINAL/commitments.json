@@ -1,0 +1,30 @@
+[
+  {
+    "commitment_id": "1b2d3c4e-5f6a-7d8e-9a0b-1c2d3e4f5a6b",
+    "speaker_id": "P-101",
+    "statement": "I will have the DB connection script pushed and tested by tomorrow evening.",
+    "commitment_type": "delivery",
+    "priority": "high",
+    "promised_date": "2023-10-04",
+    "dependencies": [],
+    "status": "open",
+    "owner_explicitly_confirmed": true,
+    "confidence": 0.9,
+    "verified": false
+  },
+  {
+    "commitment_id": "2b3c4d5e-6f7a-8d9e-0a1b-2c3d4e5f6a7b",
+    "speaker_id": "P-102",
+    "statement": "I will escalate that to DevOps right after this call.",
+    "commitment_type": "escalation",
+    "priority": "high",
+    "promised_date": null,
+    "dependencies": [
+      "P-103"
+    ],
+    "status": "open",
+    "owner_explicitly_confirmed": true,
+    "confidence": 0.85,
+    "verified": false
+  }
+]
