@@ -1,0 +1,11 @@
+decisions:
+- Push the UAT demo to Friday.
+action_items:
+- owner_id: P-202
+  task: Patch AWS IAM permissions and restart ECS cluster.
+  deadline: Today 3 PM
+- owner_id: P-203
+  task: Work on local mock data.
+blockers:
+- owner_id: P-203
+  issue: Staging API returning 500 errors due to AWS IAM.

@@ -1,0 +1,15 @@
+[00:10] Sarah Connor: Alright, is everyone here? Can you guys hear me?
+[00:15] David Chen: Yeah, I can hear you. Kabir is still joining I think.
+[00:18] Kabir Singh: Sorry guys, my Zoom crashed. I am here now. Let's get started.
+[00:26] Sarah Connor: Okay, agenda for today is the architecture migration and the biometrics integration. Let's start with the database migration. David, where are we with moving the PostgreSQL instances to the new VPC?
+[00:46] David Chen: It's been a nightmare, honestly. The AWS Terraform scripts applied fine, but the security groups are blocking inbound traffic from the Kubernetes cluster. I spent three hours yesterday just trying to ping the DB from the pods. I opened a ticket with CloudOps but they haven't responded.
+[02:01] Sarah Connor: Okay, that's a massive blocker. If the DB isn't up, Ayush can't test the voice embeddings. I will escalate the CloudOps ticket to the Director right after this call.
+[02:16] David Chen: Thanks, Sarah. Once they unblock the port, the migration will take like two hours.
+[10:00] Ayush Kumar: Hey guys, quick question about the frontend. Are we still using EasyOCR for the video processing, or did we officially rip that out?
+[10:46] Kabir Singh: We completely ripped it out. The PR was merged last night. It was way too brittle. We are moving strictly to the Calendar API pre-fill and the audio biometrics for speaker mapping. It makes the UI much cleaner anyway.
+[11:21] Sarah Connor: Great decision. So, decision officially logged: EasyOCR is deprecated. We rely solely on voice biometrics.
+[20:00] Ayush Kumar: So regarding the biometric mapping, I've got the embedding model working locally. The ECAPA-TDNN model from SpeechBrain is giving us like 95% accuracy on clean audio. But I don't have anywhere to store the vector embeddings yet because, well, the database is blocked.
+[20:51] Sarah Connor: Understood. Ayush, for now, just mock the database locally using SQLite so you don't lose momentum. Once David's CloudOps ticket is resolved, you can port it over to the remote PostgreSQL.
+[21:41] Ayush Kumar: Makes sense. I'll build the local SQLite mock by tomorrow morning.
+[29:40] Sarah Connor: Alright, we are at time. Thanks everyone, I'll send out the notes and push that escalation. Bye.
+[29:49] David Chen: Catch you later.

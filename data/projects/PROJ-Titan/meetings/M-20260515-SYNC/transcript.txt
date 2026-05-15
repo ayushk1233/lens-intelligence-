@@ -1,0 +1,9 @@
+[00:00:12] Riya Sharma: Okay, let's start. Kabir, where are we with the frontend dashboard?
+[00:00:15] Unknown Caller: Hey guys, sorry I'm late, my audio was completely messed up. Can you hear me?
+[00:00:18] Riya Sharma: Yeah, we hear you. No problem. Kabir, go ahead.
+[00:00:20] Kabir Singh: Yeah, so... um, the UI is mostly done, but the staging API is constantly throwing 500s. Matlab, data load hi nahi ho raha hai. I can't test the components. I am completely blocked right now.
+[00:00:35] David Chen: Ah, my bad guys. That's the AWS IAM role migration we did last night. I think I missed a policy attachment for the staging DB. 
+[00:00:42] Riya Sharma: How long to fix?
+[00:00:44] David Chen: I will patch the IAM permissions and restart the ECS cluster by 3 PM today.
+[00:00:50] Riya Sharma: Okay, decision made: we push the UAT demo to Friday to give us a buffer. David, please get that patched ASAP. Kabir, just work on the local mock data until staging is back up.
+[00:01:05] Kabir Singh: Sounds good.

@@ -1,0 +1,14 @@
+decisions:
+- EasyOCR is officially deprecated in favor of voice biometrics.
+action_items:
+- owner_id: P-101
+  task: Escalate CloudOps ticket to unblock database port.
+  deadline: Today
+- owner_id: P-104
+  task: Build local SQLite mock for embedding storage.
+  deadline: Tomorrow morning
+blockers:
+- owner_id: P-102
+  issue: AWS security groups blocking inbound K8s traffic to database.
+- owner_id: P-104
+  issue: Cannot test biometrics remote storage until DB is unblocked.

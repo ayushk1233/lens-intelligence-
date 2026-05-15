@@ -1,0 +1,22 @@
+[
+  {
+    "person_id": "P-101",
+    "name": "Sarah Connor",
+    "role": "Project Manager"
+  },
+  {
+    "person_id": "P-102",
+    "name": "David Chen",
+    "role": "DevOps Engineer"
+  },
+  {
+    "person_id": "P-103",
+    "name": "Kabir Singh",
+    "role": "Frontend Lead"
+  },
+  {
+    "person_id": "P-104",
+    "name": "Ayush Kumar",
+    "role": "AI Engineer"
+  }
+]

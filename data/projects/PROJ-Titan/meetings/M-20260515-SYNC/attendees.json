@@ -1,0 +1,26 @@
+[
+  {
+    "person_id": "P-201",
+    "name": "Riya Sharma",
+    "role": "Product Manager",
+    "dept": "Product"
+  },
+  {
+    "person_id": "P-202",
+    "name": "David Chen",
+    "role": "DevOps Engineer",
+    "dept": "Infrastructure"
+  },
+  {
+    "person_id": "P-203",
+    "name": "Kabir Singh",
+    "role": "Frontend Lead",
+    "dept": "Engineering"
+  },
+  {
+    "person_id": "UNKNOWN_01",
+    "name": "Unknown Caller",
+    "role": "Guest",
+    "dept": null
+  }
+]
